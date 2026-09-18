@@ -1,0 +1,13 @@
+flowchart TD
+  A["TypeScript route files"] --> B["Static parser"]
+  B --> C["Route metadata"]
+  C --> D["OpenAPI 3.1 builder"]
+  D --> E["openapi.json"]
+  D --> F["Markdown renderer"]
+  D --> G["HTML renderer"]
+  F --> H["api.md"]
+  G --> I["index.html"]
+  C --> J{"--openai enabled?"}
+  J -->|No| D
+  J -->|Yes| K["Optional description provider"]
+  K --> D

@@ -234,7 +234,7 @@ fastify.get("/reports/:id", {
 
 Supported annotation tags include `@api`, `@route`, `@summary`, `@description`, `@tag`, `@tags`, `@operationId`, `@param`, `@query`, `@path`, `@header`, `@requestBody`, `@body`, and `@response`.
 
-## Codebase Structure
+## Repository map
 
 ```text
 src/
@@ -282,3 +282,7 @@ git diff --check
 ```
 
 Only `README.md` is tracked as project Markdown. Keep private notes, local handoff files, environment files, and generated workflow logs outside version control.
+
+## Documentation
+
+- [Architecture diagram source](docs/architecture.mmd)
