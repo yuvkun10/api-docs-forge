@@ -85,4 +85,23 @@ describe("buildOpenApiDocument", () => {
       }
     });
   });
+
+  it("keeps unsafe route paths as plain keys without polluting Object.prototype", () => {
+    const routes: ApiRoute[] = ["__proto__", "constructor", "prototype"].map((path) => ({
+      method: "get",
+      path,
+      operationId: `get_${path}`,
+      parameters: [],
+      responses: {}
+    }));
+
+    const document = buildOpenApiDocument(routes, { title: "Unsafe API", version: "1.0.0" });
+
+    expect(({} as Record<string, unknown>).get).toBeUndefined();
+    expect(Object.entries(document.paths).map(([path, item]) => [path, item.get?.operationId])).toEqual([
+      ["__proto__", "get___proto__"],
+      ["constructor", "get_constructor"],
+      ["prototype", "get_prototype"]
+    ]);
+  });
 });

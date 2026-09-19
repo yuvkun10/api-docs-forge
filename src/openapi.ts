@@ -1,19 +1,13 @@
-import type { ApiResponse, ApiRoute, OpenApiDocument, OpenApiOptions } from "./types.js";
+import type { ApiResponse, ApiRoute, OpenApiDocument, OpenApiOptions, OpenApiPathItem } from "./types.js";
 
 export function buildOpenApiDocument(routes: ApiRoute[], options: OpenApiOptions): OpenApiDocument {
-  const document: OpenApiDocument = {
-    openapi: "3.1.0",
-    info: {
-      title: options.title,
-      version: options.version,
-      ...(options.description ? { description: options.description } : {})
-    },
-    paths: {}
-  };
+  // A Map keeps route paths such as "__proto__" from reaching Object.prototype.
+  const paths = new Map<string, OpenApiPathItem>();
 
   for (const route of [...routes].sort(compareRoutes)) {
-    document.paths[route.path] ??= {};
-    document.paths[route.path][route.method] = {
+    const item = paths.get(route.path) ?? {};
+    paths.set(route.path, item);
+    item[route.method] = {
       operationId: route.operationId,
       ...(route.summary ? { summary: route.summary } : {}),
       ...(route.description ? { description: route.description } : {}),
@@ -24,7 +18,15 @@ export function buildOpenApiDocument(routes: ApiRoute[], options: OpenApiOptions
     };
   }
 
-  return document;
+  return {
+    openapi: "3.1.0",
+    info: {
+      title: options.title,
+      version: options.version,
+      ...(options.description ? { description: options.description } : {})
+    },
+    paths: Object.fromEntries(paths)
+  };
 }
 
 function responsesOrFallback(responses: Record<string, ApiResponse>): Record<string, ApiResponse> {
