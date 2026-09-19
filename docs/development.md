@@ -28,4 +28,4 @@ npm run check:outdated
 git diff --check
 ```
 
-Project Markdown is limited to `README.md` and the files under `docs/`. Until 19 Sep 2026 only `README.md` was tracked. Keep private notes, local handoff files, environment files, and generated workflow logs outside version control.
+Project Markdown is limited to `README.md`, the agent guide `AGENTS.md` with its `CLAUDE.md` import stub, and the files under `docs/`. Until 19 Sep 2026 only `README.md` was tracked. Keep private notes, local handoff files, environment files, and generated workflow logs outside version control.
