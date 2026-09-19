@@ -40,6 +40,22 @@ describe("renderers", () => {
     expect(markdown).toContain("| 200 | OK |");
   });
 
+  it("escapes backslashes and pipes in Markdown table cells", () => {
+    const markdown = renderMarkdown({
+      ...document,
+      paths: {
+        "/files": {
+          get: {
+            operationId: "listFiles",
+            responses: { "200": { description: "Path like C:\\docs, split a\\|b or a|b" } }
+          }
+        }
+      }
+    });
+
+    expect(markdown).toContain("| 200 | Path like C:\\\\docs, split a\\\\\\|b or a\\|b |");
+  });
+
   it("renders escaped standalone HTML", () => {
     const html = renderHtml(document);
 
